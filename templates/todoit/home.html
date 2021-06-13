@@ -1,0 +1,69 @@
+{% extends 'todoit/base.html' %}
+{% load static %}
+{% block content %}
+
+
+    <div class="app-main">
+        <div class="app-sidebar sidebar-shadow">
+            <div class="scrollbar-sidebar">
+                <div class="app-sidebar__inner">
+                    <ul class="vertical-nav-menu">
+                        <li class="app-sidebar__heading">Dashboard</li>
+                        <li>
+                            <a href="{% url 'home' %}">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Inbox
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'add' %}">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Add Task
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="app-main__outer">
+            <div class="app-main__inner">
+                <div class="tab-content">
+                    <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="main-card mb-3 card">
+                                {% if todoit %}
+                                    <div class="card-body"><h5 class="card-title">Pending Tasks</h5>
+                                {% else %}
+                                    <div class="card-body"><h5 class="card-title">No Pending Tasks, Hurray!!!</h5>
+                                {% endif %}
+                                    <div class="card-body">
+                                        <form class="">
+                                            <fieldset class="position-relative form-group">
+                                                <div class="position-relative form-check">
+                                                    {% for todo in todoit %}
+                                                    <label class="form-check-label">
+                                                    <form method="post" action="{% url 'done' %}">
+                                                        {% csrf_token %}
+                                                        <input name="id" id="{{ todo.id }}" value="{{ todo.id }}"
+                                                               type="radio" class="form-check-input"
+                                                               onchange="done({{ todo.id }})">
+                                                    </form>
+                                                        <a href="/todoit/edit/{{ todo.id }}">{{ todo.task_name }}</a>
+                                                    </label>
+                                                        <br/>
+                                                    {% endfor %}
+                                                </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'todoit/scripts/todoit.js' %}"></script>
+
+{% endblock %}
